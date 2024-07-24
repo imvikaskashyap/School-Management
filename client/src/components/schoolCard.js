@@ -8,7 +8,7 @@ const SchoolCard = ({ school }) => {
       <div className="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
         <div>
           <img
-            src={`${BASE_URL}/${school.image}`}
+            src={school.image}
             alt="School"
             className="h-52 w-72 object-cover rounded-t-xl"
           />
