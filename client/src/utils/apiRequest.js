@@ -1,7 +1,7 @@
 
 
 export const apiRequest = async ({ endUrl, method, body }) => {
-  const baseUrl = "http://localhost:5000/api/v1/";
+  const baseUrl = "https://school-management-ybi2.onrender.com/api/v1/";
   const url = `${baseUrl}${endUrl}`;
 
   const options = {

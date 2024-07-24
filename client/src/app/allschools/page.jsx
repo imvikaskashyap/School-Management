@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiRequest } from "@/utils/apiRequest";
 import Link from "next/link";
 import SchoolCard from "@/components/schoolCard";
+import Loader from "@/components/loader";
 
 const AllSchools = () => {
   const [schools, setSchools] = useState([]);
@@ -29,7 +30,7 @@ const AllSchools = () => {
   const router = useRouter();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return (
