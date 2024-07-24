@@ -1,8 +1,11 @@
-const { addSchool, getAllSchools } = require('../controllers/school.controller');
-const errorHandler = require('../middlewares/errorHandler');
-const upload = require("../middlewares/uploadImage")
+const express = require("express")
+const schoolRouter = express.Router()
 
-module.exports = (app) => {
-    app.post('/api/v1/school/create',errorHandler, upload, addSchool);
-    app.get('/api/v1/school', errorHandler, getAllSchools);
-};
+const schoolsController = require("../controllers/school.controller")
+const upload = require('../middlewares/uploadImage');
+
+schoolRouter.get("/", schoolsController.getAll)
+schoolRouter.post('/create', upload.single('image'), schoolsController.create);
+
+
+module.exports = schoolRouter

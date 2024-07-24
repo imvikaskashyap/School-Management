@@ -1,47 +1,62 @@
-const { School } = require("../models/School");
-const { asyncHandler } = require("../utils/asyncHandler");
-const { ApiError } = require("../utils/ApiError");
-const { ApiResponse } = require("../utils/ApiResponse");
+const pool = require("../configs/dbConfig");
 
+const schoolsController = {
+    getAll: async (req, res) => {
+        try {
+            const [rows] = await pool.query("SELECT * FROM schools");
+            res.json({
+                status: "success",
+                data: rows
+            });
+        } catch (error) {
+            console.error(error);
+            res.json({
+                status: "error",
+                message: "An unexpected error occurred while retrieving schools"
+            });
+        }
+    },
 
-exports.addSchool = asyncHandler(async (req, res, next) => {
-  try {
-    const { name, address, city, state, contact, email_id } = req.body;
-    let image = req.file ? req.file.path : null;
-
-    if (!(name && address && city && state && contact && email_id)) {
-      throw new ApiError(400, "All fields are compulsory");
-    }
-
-    // if (!image) {
-    //   throw new ApiError(400, "Image is required");
-    // }
-
-    const existingSchool = await School.findOne({ where: { email_id } });
-    if (existingSchool) {
-      throw new ApiError(409, "A school with this email already exists");
-    }
-
-    const newSchool = await School.create({
-      name,
-      address,
-      city,
-      state,
-      contact,
-      email_id,
-      // image
-    });
-
-    res.status(201).json(new ApiResponse(201, newSchool, "School created successfully"));
-  } catch (error) {
-    console.error('Error creating school:', error.message, error.stack);
-    next(new ApiError(500, "An unexpected error occurred"));
+    create: async (req, res) => {
+      try {
+          const { name, address, city, state, contact, email_id } = req.body;
+          let image = req.file ? req.file.path : null;
+  
+          if (!(name && address && city && state && contact && email_id)) {
+              return res.status(400).json({
+                  status: "error",
+                  message: "All fields are compulsory"
+              });
+          }
+  
+          const [existingSchoolRows] = await pool.query("SELECT * FROM schools WHERE email_id = ?", [email_id]);
+          if (existingSchoolRows.length > 0) {
+              return res.status(409).json({
+                  status: "error",
+                  message: "A school with this email already exists"
+              });
+          }
+  
+          const [result] = await pool.query(
+              "INSERT INTO schools (name, address, city, state, contact, email_id, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
+              [name, address, city, state, contact, email_id, image]
+          );
+  
+          const [newSchool] = await pool.query("SELECT * FROM schools WHERE id = ?", [result.insertId]);
+  
+          res.status(201).json({
+              status: "success",
+              data: newSchool[0]
+          });
+      } catch (error) {
+          console.error('Error creating school:', error.message, error.stack);
+          res.status(500).json({
+              status: "error",
+              message: "An unexpected error occurred while creating the school"
+          });
+      }
   }
-});
+  
+};
 
-
-
-exports.getAllSchools = asyncHandler(async (req, res, next) => {
-  const schools = await School.findAll();
-  res.status(200).json(new ApiResponse(200, schools, "Schools retrieved successfully"));
-});
+module.exports = schoolsController;
