@@ -13,9 +13,9 @@ exports.addSchool = asyncHandler(async (req, res, next) => {
       throw new ApiError(400, "All fields are compulsory");
     }
 
-    if (!image) {
-      throw new ApiError(400, "Image is required");
-    }
+    // if (!image) {
+    //   throw new ApiError(400, "Image is required");
+    // }
 
     const existingSchool = await School.findOne({ where: { email_id } });
     if (existingSchool) {
@@ -29,7 +29,7 @@ exports.addSchool = asyncHandler(async (req, res, next) => {
       state,
       contact,
       email_id,
-      image
+      // image
     });
 
     res.status(201).json(new ApiResponse(201, newSchool, "School created successfully"));
