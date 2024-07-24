@@ -1,8 +1,6 @@
 import React from "react";
 
 const SchoolCard = ({ school }) => {
-  const BASE_URL = "http://localhost:5000";
-
   return (
     <div>
       <div className="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
