@@ -1,10 +1,16 @@
 const express = require("express")
 const app = express()
 
+
 const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const serverConfig = require("./configs/serverConfig")
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -24,6 +30,6 @@ app.get("/",(req,res)=>{
 require('./routes/schoolRoute')(app)
 app.use(errorHandler);
 
-app.listen(serverConfig.PORT, () => {
-    console.log(`Server is running up and down by PORT: ${serverConfig.PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running up and down by PORT: ${port}`);
 })
