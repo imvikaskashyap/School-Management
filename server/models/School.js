@@ -3,7 +3,7 @@ const { dbInstance } = require('../configs/dbConfig');
 
 const School = dbInstance.define('school', {
     id: {
-        type: DataTypes.TEXT,
+        type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
     },
@@ -24,15 +24,14 @@ const School = dbInstance.define('school', {
         allowNull: false,
     },
     contact: {
-        type: DataTypes.TEXT,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     image: {
         type: DataTypes.TEXT,
-        required:false
     },
     email_id: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
