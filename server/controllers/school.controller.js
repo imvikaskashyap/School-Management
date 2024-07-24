@@ -6,7 +6,7 @@ const { ApiResponse } = require("../utils/ApiResponse");
 
 exports.addSchool = asyncHandler(async (req, res, next) => {
   const { name, address, city, state, contact, email_id } = req.body;
-let [image] = req.file
+// let [image] = req.file
 
   if (!(name && address && city && state && contact && email_id)) {
     throw new ApiError(400, "All fields are compulsory");
@@ -37,7 +37,7 @@ let [image] = req.file
     state,
     contact,
     email_id,
-    image: image ? image : "",
+    // image: image ? image : "",
   });
 
   res.status(201).json(new ApiResponse(201, newSchool, "School created successfully"));
