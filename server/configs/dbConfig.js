@@ -15,7 +15,7 @@ const dbInstance = new sequelize('testing_schools', 'root', 'toor', {
 const dbConnect = async () => {
     try {
         await dbInstance.authenticate()
-        console.log('connnection has been established');
+        console.log('connection has been established');
     } catch (error) {
         console.log('unable to connect')
     }
