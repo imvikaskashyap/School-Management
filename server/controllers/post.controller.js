@@ -3,18 +3,22 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { ApiError } = require("../utils/ApiError");
 const { ApiResponse } = require("../utils/ApiResponse");
 
-exports.createPost = asyncHandler(async (req, res) => {
-  const { title, content } = req.body;
 
-  if (!title || !content) {
-    throw new ApiError(400, "Title and content are required");
+
+exports.createPost = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ success: false, message: "Title and content are required" });
+    }
+
+    const newPost = await Post.create({ title, content });
+    res.status(201).json({ success: true, data: newPost, message: "Post created successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
   }
-
-  const newPost = await Post.create({ title, content });
-  res
-    .status(201)
-    .json(new ApiResponse(201, newPost, "Post created successfully"));
-});
+};
 
 exports.getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.findAll();
