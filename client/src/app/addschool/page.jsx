@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { HomeIcon, MoveLeft, School } from "lucide-react";
 import Link from "next/link";
 import { apiRequest } from "@/utils/apiRequest";
+import Loader from "@/components/loader";
 
 export default function AddSchool() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ export default function AddSchool() {
   });
 
   const [errors, setErrors] = useState({});
-
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -50,19 +51,16 @@ export default function AddSchool() {
     e.preventDefault();
     if (!validate()) return;
 
+    setLoading(true); 
+
     const data = new FormData();
     for (let key in formData) {
       data.append(key, formData[key]);
     }
 
- 
-    for (let [key, value] of data.entries()) {
-      console.log(key, value);
-    }
-
     try {
       const response = await apiRequest({
-        endUrl: 'school/create', 
+        endUrl: 'school/create',
         method: 'POST',
         body: data,
       });
@@ -70,12 +68,15 @@ export default function AddSchool() {
       if (response.status === 201) {
         setErrors({});
         alert("School added successfully!");
+        setLoading(false); 
         router.push("/allschools");
       } else {
         alert("Failed to add school. Please try again with another email.");
+        setLoading(false); 
       }
     } catch (error) {
       console.error("Error adding school:", error);
+      setLoading(false); 
     }
   };
 
@@ -91,9 +92,9 @@ export default function AddSchool() {
     });
     setErrors({});
   };
-
   return (
     <>
+    {loading && <Loader />}
       <div className="text-center p-10 pb-4 relative">
         <button
           onClick={() => router.back()}
