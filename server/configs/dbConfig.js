@@ -1,4 +1,4 @@
-// src/configs/dbConfig.js
+
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 
