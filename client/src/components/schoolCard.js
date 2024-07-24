@@ -10,7 +10,7 @@ const SchoolCard = ({ school }) => {
             alt="School"
             className="h-52 w-72 object-cover rounded-t-xl"
           />
-          <div className="px-4 py-3 w-72 h-40">
+          <div className="px-4 pt-3 pb-1 w-72 h-32">
             <span className="text-blue-300 mr-3 uppercase text-xs">
               {school.city}
             </span>
@@ -20,12 +20,6 @@ const SchoolCard = ({ school }) => {
 
             <p className="text-sm text-gray-600 cursor-auto ml-1 mt-1">
               Add: {school.address}
-            </p>
-            <p className="text-sm text-gray-600 cursor-auto ml-1 mt-1">
-              Ph: {school.contact}
-            </p>
-            <p className="text-sm text-gray-600 cursor-auto ml-1 mt-1">
-              Email: {school.email_id}
             </p>
           </div>
           <div className="flex justify-center pb-3">
