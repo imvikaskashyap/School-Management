@@ -1,26 +1,31 @@
-const sequelize = require('sequelize')
+// src/configs/dbConfig.js
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
 
-const dbInstance = new sequelize('testing_schools', 'root', 'toor', {
-    host: 'localhost',
+dotenv.config();
+
+const dbInstance = new Sequelize(process.env.DB_DBNAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
     dialect: 'mysql',
-    logging:false,
+    logging: false,
     pool: {
-        operatorAliases: 0,
         max: 5,
         min: 0,
         acquire: 30000,
-        idle: 10000
-    }
+        idle: 10000,
+    },
 });
+
 const dbConnect = async () => {
     try {
-        await dbInstance.authenticate()
-        console.log('connection has been established');
+        await dbInstance.authenticate();
+        console.log('Connection has been established successfully.');
     } catch (error) {
-        console.log('unable to connect')
+        console.error('Unable to connect to the database:', error);
     }
-}
+};
+
 module.exports = {
     dbInstance,
-    dbConnect
-}
+    dbConnect,
+};
