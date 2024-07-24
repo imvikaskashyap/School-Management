@@ -28,6 +28,7 @@ app.get("/",(req,res)=>{
 
 
 require('./routes/schoolRoute')(app)
+require('./routes/postRoute')(app)
 app.use(errorHandler);
 
 app.listen(port, () => {
