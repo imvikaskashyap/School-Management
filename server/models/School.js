@@ -29,6 +29,7 @@ const School = dbInstance.define('school', {
     },
     image: {
         type: DataTypes.TEXT,
+        required:false
     },
     email_id: {
         type: DataTypes.STRING,

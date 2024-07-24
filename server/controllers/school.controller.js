@@ -6,7 +6,7 @@ const { ApiResponse } = require("../utils/ApiResponse");
 
 exports.addSchool = asyncHandler(async (req, res, next) => {
   const { name, address, city, state, contact, email_id } = req.body;
-
+let [image] = req.file
 
   if (!(name && address && city && state && contact && email_id)) {
     throw new ApiError(400, "All fields are compulsory");
@@ -18,12 +18,17 @@ exports.addSchool = asyncHandler(async (req, res, next) => {
     throw new ApiError(400, "A school with this email already exists");
   }
 
-  let imagePath = "";
-  if (req.file) {
-    imagePath = req.file.path;
-  } else {
+  // let imagePath = "";
+  // if (req.file) {
+  //   imagePath = req.file.path;
+  // } else {
+  //   throw new ApiError(400, "Image is required");
+  // }
+
+  if(!image){
     throw new ApiError(400, "Image is required");
   }
+
 
   const newSchool = await School.create({
     name,
@@ -32,7 +37,7 @@ exports.addSchool = asyncHandler(async (req, res, next) => {
     state,
     contact,
     email_id,
-    image: imagePath,
+    image: image ? image : "",
   });
 
   res.status(201).json(new ApiResponse(201, newSchool, "School created successfully"));
