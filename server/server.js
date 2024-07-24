@@ -12,6 +12,7 @@ app.use('/schoolImages', express.static('schoolImages'));
 
 
 const db = require('./configs/dbConfig')
+const errorHandler = require("./middlewares/errorHandler")
 db.dbConnect()
 
 app.get("/",(req,res)=>{
@@ -21,6 +22,7 @@ app.get("/",(req,res)=>{
 
 
 require('./routes/schoolRoute')(app)
+app.use(errorHandler);
 
 app.listen(serverConfig.PORT, () => {
     console.log(`Server is running up and down by PORT: ${serverConfig.PORT}`);
