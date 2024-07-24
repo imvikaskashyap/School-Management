@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { MoveLeft, MoveRight } from "lucide-react";
+import { HomeIcon, MoveLeft, School } from "lucide-react";
 import Link from "next/link";
+import { apiRequest } from "@/utils/apiRequest";
 
 export default function AddSchool() {
   const [formData, setFormData] = useState({
@@ -55,20 +55,25 @@ export default function AddSchool() {
       data.append(key, formData[key]);
     }
 
-    try {
-      await axios.post("/api/schools/add", data);
+ 
+    for (let [key, value] of data.entries()) {
+      console.log(key, value);
+    }
 
-      setFormData({
-        name: "",
-        address: "",
-        city: "",
-        state: "",
-        contact: "",
-        email_id: "",
-        image: null,
+    try {
+      const response = await apiRequest({
+        endUrl: 'school/create', 
+        method: 'POST',
+        body: data,
       });
-      setErrors({});
-      alert("School added successfully!");
+
+      if (response.status === 201) {
+        setErrors({});
+        alert("School added successfully!");
+        router.push("/allschools");
+      } else {
+        alert("Failed to add school. Please try again with another email.");
+      }
     } catch (error) {
       console.error("Error adding school:", error);
     }
@@ -92,11 +97,25 @@ export default function AddSchool() {
       <div className="text-center p-10 pb-4 relative">
         <button
           onClick={() => router.back()}
-          className="absolute top-0 left-0 mt-10 ml-16 py-2 px-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+           className="absolute top-0 left-0 mt-10 ml-2 lg:ml-16 py-2 px-4  bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
         >
-        <MoveLeft />
+          <MoveLeft />
         </button>
-        <h1 className="font-bold text-4xl mb-4">Add a School</h1>
+        <h1 className="font-bold text-4xl mt-16 mb-4">Add a School</h1>
+        <Link href="/allschools">
+          <button class="Btn ">
+            <div class="sign"> <School/></div>
+
+            <div class="text">Schools</div>
+          </button>
+        </Link>
+        <Link href="/">
+          <button class="Btn2 ">
+            <div class="sign"><HomeIcon /></div>
+
+            <div class="text">Home</div>
+          </button>
+        </Link>
       </div>
       <div className="mb-12 p-8 rounded border border-gray-200 max-w-2xl mx-auto bg-white shadow-lg">
         <p className="text-gray-600 mt-6 text-center">
@@ -261,29 +280,17 @@ export default function AddSchool() {
           <div className="space-x-4 mt-8 flex justify-center">
             <button
               type="submit"
-              className="py-2 px-4 bg-black text-white rounded hover:bg-black disabled:opacity-50"
+              className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
-              Save
+              Add School
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="py-2 px-4 bg-white border border-gray-200 text-gray-600 rounded hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50"
+              className="py-2 px-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
             >
               Clear
             </button>
-
-            
-          
-          </div>
-          <div className="space-x-4 mt-8 flex justify-end">
-          <Link
-              href="/allschools"
-            
-              className="py-2 px-4 underline cursor-pointer"
-            >
-            view all schools
-            </Link>
           </div>
         </form>
       </div>

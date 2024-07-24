@@ -1,117 +1,75 @@
-'use client'
-import { MoveLeft } from 'lucide-react'
-import React from 'react'
+"use client";
+import { HomeIcon, MoveLeft } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiRequest } from "@/utils/apiRequest";
+import Link from "next/link";
+import SchoolCard from "@/components/schoolCard";
 
 const AllSchools = () => {
+  const [schools, setSchools] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiRequest({ endUrl: "school" });
+        setSchools(response.data.data);
+        console.log(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const router = useRouter();
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-   <div className="text-center p-10 pb-0 relative">
+      <div className="text-center p-10 pb-0 relative">
         <button
           onClick={() => router.back()}
-          className="absolute top-0 left-0 mt-10 ml-16 py-2 px-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+          className="absolute top-0 left-0 mt-10 ml-0 lg:ml-16 py-2 px-4  bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
         >
-        <MoveLeft />
+          <MoveLeft />
         </button>
-        <h1 className="font-bold text-4xl mb-4">All Schools</h1>
-        <button
-          
-          className="absolute top-0 right-0 mt-10 mr-16 py-2 px-4 bg-black text-gray-100 "
-        >
-        Add School +
-        </button>
+        <h1 className="font-bold text-xl lg:text-4xl mt-16  mb-4">
+          All Schools
+        </h1>
+        <Link href="addschool">
+          <button class="Btn ">
+            <div class="sign">+</div>
+
+            <div class="text">Add</div>
+          </button>
+        </Link>
+        <Link href="/">
+          <button class="Btn2 ">
+            <div class="sign"><HomeIcon /></div>
+
+            <div class="text">Home</div>
+          </button>
+        </Link>
       </div>
 
       <section
         id="Projects"
-        className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"
+        className="mt-28 lg:mt-20 w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"
       >
-        <div className="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-          <a href="#">
-            <img
-              src="https://images.unsplash.com/photo-1646753522408-077ef9839300?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NjZ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-              alt="Product"
-              className="h-80 w-72 object-cover rounded-t-xl"
-            />
-            <div className="px-4 py-3 w-72">
-              <span className="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-              <p className="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-              <div className="flex items-center">
-                <p className="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                <del>
-                  <p className="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                </del>
-                <div className="ml-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    className="bi bi-bag-plus"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
-                    />
-                    <path
-                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-
- 
-        <div className="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-          <a href="#">
-            <img
-              src="https://images.unsplash.com/photo-1651950519238-15835722f8bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8Mjh8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-              alt="Product"
-              className="h-80 w-72 object-cover rounded-t-xl"
-            />
-            <div className="px-4 py-3 w-72">
-              <span className="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-              <p className="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-              <div className="flex items-center">
-                <p className="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                <del>
-                  <p className="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                </del>
-                <div className="ml-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    className="bi bi-bag-plus"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
-                    />
-                    <path
-                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-
-  
+        {schools
+          .map((school, i) => <SchoolCard key={i} school={school} />)
+          .reverse()}
       </section>
-
-   
     </>
-  )
-}
+  );
+};
 
-export default AllSchools
+export default AllSchools;
